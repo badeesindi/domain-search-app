@@ -93,7 +93,7 @@ export default function DomainSearchApp() {
         type="text"
         value={domain}
         onChange={(e) => setDomain(e.target.value)}
-        placeholder="أدخل اسم النطاق..." />
+        placeholder="أدخل اسم النطاق..." style={{ width: "100%", padding: "10px", marginBottom: 10 }} />
       <div style={{ marginTop: 10 }}>
         <h4>🌐 الامتدادات المستخدمة في البحث:</h4>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
