@@ -1,5 +1,5 @@
 {
-  "name": "domain-search-final-fully-fixed",
+  "name": "domain-search-final-fixed-correctly",
   "version": "1.0.0",
   "scripts": {
     "dev": "next dev",
