@@ -1,5 +1,5 @@
 {
-  "name": "domain-search-app-manual-only",
+  "name": "domain-search-manual-complete",
   "version": "1.0.0",
   "scripts": {
     "dev": "next dev",
