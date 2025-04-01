@@ -14,6 +14,20 @@ interface DomainResult {
   provider: string;
 }
 
+
+const defaultProviders = [
+  { name: "WhoisXML", apiUrl: "https://api.whoisxml.com/", apiKey: "" },
+  { name: "GoDaddy", apiUrl: "https://api.godaddy.com/", apiKey: "" },
+  { name: "Namecheap", apiUrl: "https://api.namecheap.com/", apiKey: "" },
+  { name: "Google Domains", apiUrl: "https://domains.google.com/", apiKey: "" },
+  { name: "Domainr", apiUrl: "https://api.domainr.com/", apiKey: "" },
+  { name: "Hover", apiUrl: "https://api.hover.com/", apiKey: "" },
+  { name: "Dynadot", apiUrl: "https://api.dynadot.com/", apiKey: "" },
+  { name: "Gandi", apiUrl: "https://api.gandi.net/", apiKey: "" },
+  { name: "Bluehost", apiUrl: "https://api.bluehost.com/", apiKey: "" },
+  { name: "Porkbun", apiUrl: "https://porkbun.com/api/", apiKey: "" }
+];
+
 export default function DomainSearchApp() {
   const charset = "abcdefghijklmnopqrstuvwxyz";
 
@@ -38,17 +52,6 @@ export default function DomainSearchApp() {
 
   
 const defaultProviders = [
-  { name: "WhoisXML", apiUrl: "https://api.whoisxml.com/", apiKey: "" },
-  { name: "GoDaddy", apiUrl: "https://api.godaddy.com/", apiKey: "" },
-  { name: "Namecheap", apiUrl: "https://api.namecheap.com/", apiKey: "" },
-  { name: "Google Domains", apiUrl: "https://domains.google.com/", apiKey: "" },
-  { name: "Domainr", apiUrl: "https://api.domainr.com/", apiKey: "" },
-  { name: "Hover", apiUrl: "https://api.hover.com/", apiKey: "" },
-  { name: "Dynadot", apiUrl: "https://api.dynadot.com/", apiKey: "" },
-  { name: "Gandi", apiUrl: "https://api.gandi.net/", apiKey: "" },
-  { name: "Bluehost", apiUrl: "https://api.bluehost.com/", apiKey: "" },
-  { name: "Porkbun", apiUrl: "https://porkbun.com/api/", apiKey: "" }
-];
 
 
 useEffect(() => {
@@ -61,17 +64,6 @@ useEffect(() => {
   }, []);
 
   
-  { name: "WhoisXML", apiUrl: "https://api.whoisxml.com/", apiKey: "" },
-  { name: "GoDaddy", apiUrl: "https://api.godaddy.com/", apiKey: "" },
-  { name: "Namecheap", apiUrl: "https://api.namecheap.com/", apiKey: "" },
-  { name: "Google Domains", apiUrl: "https://domains.google.com/", apiKey: "" },
-  { name: "Domainr", apiUrl: "https://api.domainr.com/", apiKey: "" },
-  { name: "Hover", apiUrl: "https://api.hover.com/", apiKey: "" },
-  { name: "Dynadot", apiUrl: "https://api.dynadot.com/", apiKey: "" },
-  { name: "Gandi", apiUrl: "https://api.gandi.net/", apiKey: "" },
-  { name: "Bluehost", apiUrl: "https://api.bluehost.com/", apiKey: "" },
-  { name: "Porkbun", apiUrl: "https://porkbun.com/api/", apiKey: "" }
-];
 
 
 useEffect(() => {
@@ -81,17 +73,6 @@ useEffect(() => {
   }, [extensions]);
 
   
-  { name: "WhoisXML", apiUrl: "https://api.whoisxml.com/", apiKey: "" },
-  { name: "GoDaddy", apiUrl: "https://api.godaddy.com/", apiKey: "" },
-  { name: "Namecheap", apiUrl: "https://api.namecheap.com/", apiKey: "" },
-  { name: "Google Domains", apiUrl: "https://domains.google.com/", apiKey: "" },
-  { name: "Domainr", apiUrl: "https://api.domainr.com/", apiKey: "" },
-  { name: "Hover", apiUrl: "https://api.hover.com/", apiKey: "" },
-  { name: "Dynadot", apiUrl: "https://api.dynadot.com/", apiKey: "" },
-  { name: "Gandi", apiUrl: "https://api.gandi.net/", apiKey: "" },
-  { name: "Bluehost", apiUrl: "https://api.bluehost.com/", apiKey: "" },
-  { name: "Porkbun", apiUrl: "https://porkbun.com/api/", apiKey: "" }
-];
 
 
 useEffect(() => {
@@ -196,17 +177,6 @@ useEffect(() => {
   };
 
   
-  { name: "WhoisXML", apiUrl: "https://api.whoisxml.com/", apiKey: "" },
-  { name: "GoDaddy", apiUrl: "https://api.godaddy.com/", apiKey: "" },
-  { name: "Namecheap", apiUrl: "https://api.namecheap.com/", apiKey: "" },
-  { name: "Google Domains", apiUrl: "https://domains.google.com/", apiKey: "" },
-  { name: "Domainr", apiUrl: "https://api.domainr.com/", apiKey: "" },
-  { name: "Hover", apiUrl: "https://api.hover.com/", apiKey: "" },
-  { name: "Dynadot", apiUrl: "https://api.dynadot.com/", apiKey: "" },
-  { name: "Gandi", apiUrl: "https://api.gandi.net/", apiKey: "" },
-  { name: "Bluehost", apiUrl: "https://api.bluehost.com/", apiKey: "" },
-  { name: "Porkbun", apiUrl: "https://porkbun.com/api/", apiKey: "" }
-];
 
 
 useEffect(() => {
