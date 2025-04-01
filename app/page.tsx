@@ -60,6 +60,7 @@ useEffect(() => {
       const savedProviders = localStorage.getItem("apiProviders");
       if (savedExt) setExtensions(JSON.parse(savedExt));
       if (savedProviders) { setProviders(JSON.parse(savedProviders)); } else { setProviders(defaultProviders); }
+    }
   }, []);
 
   
@@ -68,6 +69,7 @@ useEffect(() => {
 useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem("extensions", JSON.stringify(extensions));
+    }
   }, [extensions]);
 
   
@@ -76,6 +78,7 @@ useEffect(() => {
 useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem("apiProviders", JSON.stringify(providers));
+    }
   }, [providers]);
 
   const generateShortNames = (length = 3, count = 100): string[] => {
@@ -84,7 +87,9 @@ useEffect(() => {
       let name = "";
       for (let i = 0; i < length; i++) {
         name += charset[Math.floor(Math.random() * charset.length)];
+      }
       names.add(name);
+    }
     return Array.from(names);
   };
 
@@ -115,6 +120,8 @@ useEffect(() => {
       if (found) {
         setStatus(`✅ تم العثور على نطاق متاح: ${found.domain}`);
         break;
+      }
+    }
     setLoading(false);
     setAutoMode(false);
   };
@@ -133,6 +140,7 @@ useEffect(() => {
     if (newExt && !extensions.includes(newExt)) {
       setExtensions([...extensions, newExt]);
       setNewExt("");
+    }
   };
 
   const updateExtension = (index: number) => {
@@ -165,6 +173,7 @@ useEffect(() => {
     if (newProvider.name && newProvider.apiUrl) {
       setProviders([...providers, newProvider]);
       setNewProvider({ name: "", apiUrl: "", apiKey: "" });
+    }
   };
 
   
@@ -173,6 +182,7 @@ useEffect(() => {
 useEffect(() => {
     if (autoMode && !paused) {
       runAutoSearch();
+    }
   }, [autoMode, lastIndex, paused]);
 
   return (
@@ -263,3 +273,4 @@ useEffect(() => {
       )}
     </div>
   );
+}
