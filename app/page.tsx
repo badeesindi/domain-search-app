@@ -36,22 +36,67 @@ export default function DomainSearchApp() {
   const [generatedList, setGeneratedList] = useState<string[]>([]);
   const [showSettings, setShowSettings] = useState(false);
 
-  useEffect(() => {
+  
+const defaultProviders = [
+  { name: "WhoisXML", apiUrl: "https://api.whoisxml.com/", apiKey: "" },
+  { name: "GoDaddy", apiUrl: "https://api.godaddy.com/", apiKey: "" },
+  { name: "Namecheap", apiUrl: "https://api.namecheap.com/", apiKey: "" },
+  { name: "Google Domains", apiUrl: "https://domains.google.com/", apiKey: "" },
+  { name: "Domainr", apiUrl: "https://api.domainr.com/", apiKey: "" },
+  { name: "Hover", apiUrl: "https://api.hover.com/", apiKey: "" },
+  { name: "Dynadot", apiUrl: "https://api.dynadot.com/", apiKey: "" },
+  { name: "Gandi", apiUrl: "https://api.gandi.net/", apiKey: "" },
+  { name: "Bluehost", apiUrl: "https://api.bluehost.com/", apiKey: "" },
+  { name: "Porkbun", apiUrl: "https://porkbun.com/api/", apiKey: "" }
+];
+
+
+useEffect(() => {
     if (typeof window !== "undefined") {
       const savedExt = localStorage.getItem("extensions");
       const savedProviders = localStorage.getItem("apiProviders");
       if (savedExt) setExtensions(JSON.parse(savedExt));
-      if (savedProviders) setProviders(JSON.parse(savedProviders));
+      if (savedProviders) { setProviders(JSON.parse(savedProviders)); } else { setProviders(defaultProviders); }
     }
   }, []);
 
-  useEffect(() => {
+  
+const defaultProviders = [
+  { name: "WhoisXML", apiUrl: "https://api.whoisxml.com/", apiKey: "" },
+  { name: "GoDaddy", apiUrl: "https://api.godaddy.com/", apiKey: "" },
+  { name: "Namecheap", apiUrl: "https://api.namecheap.com/", apiKey: "" },
+  { name: "Google Domains", apiUrl: "https://domains.google.com/", apiKey: "" },
+  { name: "Domainr", apiUrl: "https://api.domainr.com/", apiKey: "" },
+  { name: "Hover", apiUrl: "https://api.hover.com/", apiKey: "" },
+  { name: "Dynadot", apiUrl: "https://api.dynadot.com/", apiKey: "" },
+  { name: "Gandi", apiUrl: "https://api.gandi.net/", apiKey: "" },
+  { name: "Bluehost", apiUrl: "https://api.bluehost.com/", apiKey: "" },
+  { name: "Porkbun", apiUrl: "https://porkbun.com/api/", apiKey: "" }
+];
+
+
+useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem("extensions", JSON.stringify(extensions));
     }
   }, [extensions]);
 
-  useEffect(() => {
+  
+const defaultProviders = [
+  { name: "WhoisXML", apiUrl: "https://api.whoisxml.com/", apiKey: "" },
+  { name: "GoDaddy", apiUrl: "https://api.godaddy.com/", apiKey: "" },
+  { name: "Namecheap", apiUrl: "https://api.namecheap.com/", apiKey: "" },
+  { name: "Google Domains", apiUrl: "https://domains.google.com/", apiKey: "" },
+  { name: "Domainr", apiUrl: "https://api.domainr.com/", apiKey: "" },
+  { name: "Hover", apiUrl: "https://api.hover.com/", apiKey: "" },
+  { name: "Dynadot", apiUrl: "https://api.dynadot.com/", apiKey: "" },
+  { name: "Gandi", apiUrl: "https://api.gandi.net/", apiKey: "" },
+  { name: "Bluehost", apiUrl: "https://api.bluehost.com/", apiKey: "" },
+  { name: "Porkbun", apiUrl: "https://porkbun.com/api/", apiKey: "" }
+];
+
+
+useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem("apiProviders", JSON.stringify(providers));
     }
@@ -152,7 +197,22 @@ export default function DomainSearchApp() {
     }
   };
 
-  useEffect(() => {
+  
+const defaultProviders = [
+  { name: "WhoisXML", apiUrl: "https://api.whoisxml.com/", apiKey: "" },
+  { name: "GoDaddy", apiUrl: "https://api.godaddy.com/", apiKey: "" },
+  { name: "Namecheap", apiUrl: "https://api.namecheap.com/", apiKey: "" },
+  { name: "Google Domains", apiUrl: "https://domains.google.com/", apiKey: "" },
+  { name: "Domainr", apiUrl: "https://api.domainr.com/", apiKey: "" },
+  { name: "Hover", apiUrl: "https://api.hover.com/", apiKey: "" },
+  { name: "Dynadot", apiUrl: "https://api.dynadot.com/", apiKey: "" },
+  { name: "Gandi", apiUrl: "https://api.gandi.net/", apiKey: "" },
+  { name: "Bluehost", apiUrl: "https://api.bluehost.com/", apiKey: "" },
+  { name: "Porkbun", apiUrl: "https://porkbun.com/api/", apiKey: "" }
+];
+
+
+useEffect(() => {
     if (autoMode && !paused) {
       runAutoSearch();
     }
