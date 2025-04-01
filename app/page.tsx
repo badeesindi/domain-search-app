@@ -85,13 +85,16 @@ export default function DomainSearchApp() {
   const startAutoSearch = async () => {
     setResults([]);
     let found = false;
-    while (autoGenerate && !found) {
+    let attempts = 0;
+    while (autoGenerate && !found && attempts < 50) {
       found = await searchDomains(generateName());
+      attempts++;
     }
+    setAutoGenerate(false); // إيقاف البحث التلقائي بعد المحاولات
   };
 
   return (
-    <div style={{ maxWidth: 1000, margin: "auto", background: "#fff", padding: 20, borderRadius: 8 }}>
+    <div dir="rtl" style={{ maxWidth: 1000, margin: "auto", background: "#fff", padding: 20, borderRadius: 8 }}>
       <h2 style={{ textAlign: "center" }}>🔍 نظام البحث عن أسماء النطاقات القصيرة</h2>
       <input
         type="text"
@@ -107,72 +110,6 @@ export default function DomainSearchApp() {
         <button onClick={() => setShowSettings(!showSettings)}>⚙️ الإعدادات</button>
       </div>
       <p style={{ marginTop: 10 }}>✅ المتاح: {summary.available} | ❌ غير المتاح: {summary.unavailable}</p>
-
-      <h4>🌐 الامتدادات:</h4>
-      <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-        {extensions.map((ext, i) => (
-          <label key={i}>
-            <input
-              type="checkbox"
-              checked={activeExtensions.includes(ext)}
-              onChange={() => {
-                setActiveExtensions(prev =>
-                  prev.includes(ext) ? prev.filter(e => e !== ext) : [...prev, ext]
-                );
-              }}
-            /> {ext}
-          </label>
-        ))}
-      </div>
-
-      {showSettings && (
-        <div style={{ background: "#f1f1f1", padding: 10, marginTop: 20 }}>
-          <h4>📡 مزودي الخدمة:</h4>
-          {providers.map((p, i) => (
-            <div key={i} style={{ marginBottom: 5 }}>
-              <input
-                type="checkbox"
-                checked={p.enabled}
-                onChange={() => {
-                  const updated = [...providers];
-                  updated[i].enabled = !updated[i].enabled;
-                  setProviders(updated);
-                }}
-              /> {p.name}
-              <input type="text" placeholder="API Key" value={p.apiKey}
-                onChange={(e) => {
-                  const updated = [...providers];
-                  updated[i].apiKey = e.target.value;
-                  setProviders(updated);
-                }} style={{ marginRight: 5 }} />
-              {p.name === "GoDaddy" && (
-                <input type="text" placeholder="API Secret" value={p.apiSecret}
-                  onChange={(e) => {
-                    const updated = [...providers];
-                    updated[i].apiSecret = e.target.value;
-                    setProviders(updated);
-                  }} style={{ marginRight: 5 }} />
-              )}
-              {p.name === "Namecheap" && (
-                <>
-                  <input type="text" placeholder="Username" value={p.username}
-                    onChange={(e) => {
-                      const updated = [...providers];
-                      updated[i].username = e.target.value;
-                      setProviders(updated);
-                    }} style={{ marginRight: 5 }} />
-                  <input type="text" placeholder="Client IP" value={p.clientIp}
-                    onChange={(e) => {
-                      const updated = [...providers];
-                      updated[i].clientIp = e.target.value;
-                      setProviders(updated);
-                    }} style={{ marginRight: 5 }} />
-                </>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
 
       {results.length > 0 && (
         <div style={{ marginTop: 30 }}>
