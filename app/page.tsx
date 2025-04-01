@@ -33,6 +33,7 @@ export default function DomainSearchApp() {
   const [domain, setDomain] = useState("");
   const [results, setResults] = useState<DomainResult[]>([]);
   const [extensions, setExtensions] = useState<string[]>(defaultExtensions);
+  const [activeExtensions, setActiveExtensions] = useState<string[]>(defaultExtensions);
   const [providers, setProviders] = useState<Provider[]>(defaultProviders);
   const [autoGenerate, setAutoGenerate] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -42,7 +43,11 @@ export default function DomainSearchApp() {
     if (typeof window !== "undefined") {
       const ext = localStorage.getItem("extensions");
       const prov = localStorage.getItem("providers");
-      if (ext) setExtensions(JSON.parse(ext));
+      if (ext) {
+        const parsed = JSON.parse(ext);
+        setExtensions(parsed);
+        setActiveExtensions(parsed);
+      }
       if (prov) setProviders(JSON.parse(prov));
     }
   }, []);
@@ -64,9 +69,9 @@ export default function DomainSearchApp() {
   const searchDomains = async (base: string) => {
     const res: DomainResult[] = [];
     let found = false;
-    for (const ext of extensions) {
+    for (const ext of activeExtensions) {
       const fullDomain = `${base}${ext}`;
-      for (const provider of providers.filter(p => p.enabled)) {
+      for (const provider of providers.filter(p => p.enabled && p.apiKey)) {
         const available = Math.random() > 0.5;
         res.push({ domain: fullDomain, available, provider: provider.name });
         if (available) found = true;
@@ -100,27 +105,65 @@ export default function DomainSearchApp() {
       </div>
       <p>✅ المتاح: {summary.available} | ❌ غير المتاح: {summary.unavailable}</p>
 
+      <h4>🌐 الامتدادات:</h4>
+      {extensions.map((ext, i) => (
+        <label key={i} style={{ marginInlineEnd: 10 }}>
+          <input
+            type="checkbox"
+            checked={activeExtensions.includes(ext)}
+            onChange={() => {
+              setActiveExtensions(prev =>
+                prev.includes(ext) ? prev.filter(e => e !== ext) : [...prev, ext]
+              );
+            }}
+          />{" "}{ext}
+        </label>
+      ))}
+
       {showSettings && (
-        <div style={{ background: "#f0f0f0", padding: "10px", marginTop: "10px" }}>
+        <div style={{ background: "#f9f9f9", padding: 10, marginTop: 20 }}>
           <h4>📡 مزودي الخدمة:</h4>
           {providers.map((p, i) => (
-            <div key={i}>
-              <input type="checkbox" checked={p.enabled} onChange={() => {
-                const updated = [...providers];
-                updated[i].enabled = !updated[i].enabled;
-                setProviders(updated);
-              }} /> {p.name}
+            <div key={i} style={{ marginBottom: 5 }}>
+              <input
+                type="checkbox"
+                checked={p.enabled}
+                onChange={() => {
+                  const updated = [...providers];
+                  updated[i].enabled = !updated[i].enabled;
+                  setProviders(updated);
+                }}
+              />{" "}
+              {p.name}
+              <input
+                type="text"
+                placeholder="API Key"
+                value={p.apiKey}
+                onChange={(e) => {
+                  const updated = [...providers];
+                  updated[i].apiKey = e.target.value;
+                  setProviders(updated);
+                }}
+                style={{ marginRight: 10, padding: 4 }}
+              />
             </div>
           ))}
 
-          <h4>🌐 الامتدادات:</h4>
+          <h4>🌐 إدارة الامتدادات:</h4>
           {extensions.map((ext, i) => (
-            <div key={i}>{ext} <button onClick={() => setExtensions(extensions.filter((_, idx) => idx !== i))}>🗑️</button></div>
+            <div key={i}>
+              {ext} <button onClick={() => {
+                const newList = extensions.filter((_, idx) => idx !== i);
+                setExtensions(newList);
+                setActiveExtensions(activeExtensions.filter(e => e !== ext));
+              }}>🗑️</button>
+            </div>
           ))}
           <button onClick={() => {
             const newExt = prompt("أدخل امتداد جديد");
             if (newExt && !extensions.includes(newExt)) {
               setExtensions([...extensions, newExt]);
+              setActiveExtensions([...activeExtensions, newExt]);
             }
           }}>➕ إضافة امتداد</button>
         </div>
