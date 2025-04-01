@@ -3,25 +3,32 @@
 import { useState, useEffect } from "react";
 
 export default function DomainSearchApp() {
-  const defaultExtensions = [".com", ".net", ".org", ".co"];
-  const [extensions, setExtensions] = useState<string[]>(() => {
-    const saved = localStorage.getItem("extensions");
-    return saved ? JSON.parse(saved) : defaultExtensions;
-  });
-
+  const [extensions, setExtensions] = useState<string[]>([".com", ".net", ".org", ".co"]);
+  const [whoisKey, setWhoisKey] = useState("");
   const [newExt, setNewExt] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editedExt, setEditedExt] = useState("");
-
-  const [whoisKey, setWhoisKey] = useState(localStorage.getItem("whoisKey") || "");
   const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem("extensions", JSON.stringify(extensions));
+    if (typeof window !== "undefined") {
+      const savedExt = localStorage.getItem("extensions");
+      const savedKey = localStorage.getItem("whoisKey");
+      if (savedExt) setExtensions(JSON.parse(savedExt));
+      if (savedKey) setWhoisKey(savedKey);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("extensions", JSON.stringify(extensions));
+    }
   }, [extensions]);
 
   useEffect(() => {
-    localStorage.setItem("whoisKey", whoisKey);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("whoisKey", whoisKey);
+    }
   }, [whoisKey]);
 
   const addExtension = () => {
