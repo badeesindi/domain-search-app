@@ -89,13 +89,7 @@ export default function DomainSearchApp() {
     <div style={{ maxWidth: 1000, margin: "auto", background: "#fff", padding: 20, borderRadius: 8 }}>
       <h2 style={{ textAlign: "center" }}>🔍 نظام البحث الذكي عن أسماء النطاقات</h2>
 
-      <input
-  type="text"
-  value={domain}
-  onChange={(e) => setDomain(e.target.value)}
-  placeholder="أدخل اسم النطاق..."
-  style={{ width: "100%", padding: "10px", marginBottom: 10 }}
-/>
+      
       <div style={{ marginTop: 10 }}>
         <h4>🌐 الامتدادات المستخدمة في البحث:</h4>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
@@ -118,6 +112,15 @@ export default function DomainSearchApp() {
 
         style={{ width: "100%", padding: "10px", marginBottom: 10 }}
       />
+
+      
+<input
+  type="text"
+  value={domain}
+  onChange={(e) => setDomain(e.target.value)}
+  placeholder="أدخل اسم النطاق..."
+  style={{ width: "100%", padding: "10px", marginBottom: 10 }}
+/>
 
       <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
         <button onClick={() => searchDomains(domain)}>🔎 بحث يدوي</button>
@@ -150,13 +153,7 @@ export default function DomainSearchApp() {
               </label>
             ))}
           </div>
-          <input
-  type="text"
-  value={domain}
-  onChange={(e) => setDomain(e.target.value)}
-  placeholder="أدخل اسم النطاق..."
-  style={{ width: "100%", padding: "10px", marginBottom: 10 }}
-/>
+          
           <button onClick={() => {
             if (newExt && !extensions.includes(newExt)) {
               const updated = [...extensions, newExt];
@@ -179,38 +176,14 @@ export default function DomainSearchApp() {
                 }}
               />{" "}
               {p.name}
-              <input
-  type="text"
-  value={domain}
-  onChange={(e) => setDomain(e.target.value)}
-  placeholder="أدخل اسم النطاق..."
-  style={{ width: "100%", padding: "10px", marginBottom: 10 }}
-/>
+              
               {p.name === "GoDaddy" && (
-                <input
-  type="text"
-  value={domain}
-  onChange={(e) => setDomain(e.target.value)}
-  placeholder="أدخل اسم النطاق..."
-  style={{ width: "100%", padding: "10px", marginBottom: 10 }}
-/>
+                
               )}
               {p.name === "Namecheap" && (
                 <>
-                  <input
-  type="text"
-  value={domain}
-  onChange={(e) => setDomain(e.target.value)}
-  placeholder="أدخل اسم النطاق..."
-  style={{ width: "100%", padding: "10px", marginBottom: 10 }}
-/>
-                  <input
-  type="text"
-  value={domain}
-  onChange={(e) => setDomain(e.target.value)}
-  placeholder="أدخل اسم النطاق..."
-  style={{ width: "100%", padding: "10px", marginBottom: 10 }}
-/>
+                  
+                  
                 </>
               )}
             </div>
