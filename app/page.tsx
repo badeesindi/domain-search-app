@@ -61,7 +61,6 @@ useEffect(() => {
   }, []);
 
   
-const defaultProviders = [
   { name: "WhoisXML", apiUrl: "https://api.whoisxml.com/", apiKey: "" },
   { name: "GoDaddy", apiUrl: "https://api.godaddy.com/", apiKey: "" },
   { name: "Namecheap", apiUrl: "https://api.namecheap.com/", apiKey: "" },
@@ -82,7 +81,6 @@ useEffect(() => {
   }, [extensions]);
 
   
-const defaultProviders = [
   { name: "WhoisXML", apiUrl: "https://api.whoisxml.com/", apiKey: "" },
   { name: "GoDaddy", apiUrl: "https://api.godaddy.com/", apiKey: "" },
   { name: "Namecheap", apiUrl: "https://api.namecheap.com/", apiKey: "" },
@@ -198,7 +196,6 @@ useEffect(() => {
   };
 
   
-const defaultProviders = [
   { name: "WhoisXML", apiUrl: "https://api.whoisxml.com/", apiKey: "" },
   { name: "GoDaddy", apiUrl: "https://api.godaddy.com/", apiKey: "" },
   { name: "Namecheap", apiUrl: "https://api.namecheap.com/", apiKey: "" },
