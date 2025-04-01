@@ -93,7 +93,27 @@ export default function DomainSearchApp() {
         type="text"
         value={domain}
         onChange={(e) => setDomain(e.target.value)}
-        placeholder="أدخل اسم النطاق..."
+        placeholder="أدخل اسم النطاق..." />
+      <div style={{ marginTop: 10 }}>
+        <h4>🌐 الامتدادات المستخدمة في البحث:</h4>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+          {extensions.map((ext, idx) => (
+            <label key={idx} style={{ background: activeExtensions.includes(ext) ? "#dff0d8" : "#f2dede", padding: "5px 10px", borderRadius: 4 }}>
+              <input
+                type="checkbox"
+                checked={activeExtensions.includes(ext)}
+                onChange={() =>
+                  setActiveExtensions((prev) =>
+                    prev.includes(ext) ? prev.filter((e) => e !== ext) : [...prev, ext]
+                  )
+                }
+              />{" "}
+              {ext}
+            </label>
+          ))}
+        </div>
+      </div>
+
         style={{ width: "100%", padding: "10px", marginBottom: 10 }}
       />
 
