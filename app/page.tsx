@@ -60,7 +60,6 @@ useEffect(() => {
       const savedProviders = localStorage.getItem("apiProviders");
       if (savedExt) setExtensions(JSON.parse(savedExt));
       if (savedProviders) { setProviders(JSON.parse(savedProviders)); } else { setProviders(defaultProviders); }
-    }
   }, []);
 
   
