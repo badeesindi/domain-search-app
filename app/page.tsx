@@ -35,6 +35,7 @@ export default function DomainSearchApp() {
   const [extensions, setExtensions] = useState<string[]>(defaultExtensions);
   const [providers, setProviders] = useState<Provider[]>(defaultProviders);
   const [autoGenerate, setAutoGenerate] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [summary, setSummary] = useState({ available: 0, unavailable: 0 });
 
   useEffect(() => {
@@ -91,35 +92,41 @@ export default function DomainSearchApp() {
     <div dir="rtl" style={{ maxWidth: 800, margin: "2rem auto", fontFamily: "Arial" }}>
       <h2>🔍 نظام البحث عن أسماء النطاقات القصيرة</h2>
       <input type="text" value={domain} onChange={(e) => setDomain(e.target.value)} placeholder="أدخل اسم النطاق..." style={{ width: "100%", padding: "10px" }} />
-      <button onClick={() => searchDomains(domain)}>🔎 بحث يدوي</button>
-      <button onClick={() => { setAutoGenerate(true); startAutoSearch(); }}>🚀 بحث تلقائي</button>
-      <button onClick={() => setAutoGenerate(false)}>⏹️ إيقاف</button>
+      <div style={{ marginTop: 10 }}>
+        <button onClick={() => searchDomains(domain)}>🔎 بحث يدوي</button>
+        <button onClick={() => { setAutoGenerate(true); startAutoSearch(); }}>🚀 بحث تلقائي</button>
+        <button onClick={() => setAutoGenerate(false)}>⏹️ إيقاف</button>
+        <button onClick={() => setShowSettings(!showSettings)}>⚙️ الإعدادات</button>
+      </div>
       <p>✅ المتاح: {summary.available} | ❌ غير المتاح: {summary.unavailable}</p>
 
-      <hr />
-      <h4>📡 مزودي الخدمة:</h4>
-      {providers.map((p, i) => (
-        <div key={i}>
-          <input type="checkbox" checked={p.enabled} onChange={() => {
-            const updated = [...providers];
-            updated[i].enabled = !updated[i].enabled;
-            setProviders(updated);
-          }} /> {p.name}
+      {showSettings && (
+        <div style={{ background: "#f0f0f0", padding: "10px", marginTop: "10px" }}>
+          <h4>📡 مزودي الخدمة:</h4>
+          {providers.map((p, i) => (
+            <div key={i}>
+              <input type="checkbox" checked={p.enabled} onChange={() => {
+                const updated = [...providers];
+                updated[i].enabled = !updated[i].enabled;
+                setProviders(updated);
+              }} /> {p.name}
+            </div>
+          ))}
+
+          <h4>🌐 الامتدادات:</h4>
+          {extensions.map((ext, i) => (
+            <div key={i}>{ext} <button onClick={() => setExtensions(extensions.filter((_, idx) => idx !== i))}>🗑️</button></div>
+          ))}
+          <button onClick={() => {
+            const newExt = prompt("أدخل امتداد جديد");
+            if (newExt && !extensions.includes(newExt)) {
+              setExtensions([...extensions, newExt]);
+            }
+          }}>➕ إضافة امتداد</button>
         </div>
-      ))}
+      )}
 
-      <h4>🌐 الامتدادات:</h4>
-      {extensions.map((ext, i) => (
-        <div key={i}>{ext} <button onClick={() => setExtensions(extensions.filter((_, idx) => idx !== i))}>🗑️</button></div>
-      ))}
-      <button onClick={() => {
-        const newExt = prompt("أدخل امتداد جديد");
-        if (newExt && !extensions.includes(newExt)) {
-          setExtensions([...extensions, newExt]);
-        }
-      }}>➕ إضافة امتداد</button>
-
-      <h4>📋 النتائج:</h4>
+      <h4 style={{ marginTop: "20px" }}>📋 النتائج:</h4>
       {results.map((r, i) => (
         <div key={i}>{r.domain} - {r.provider} - {r.available ? "✅" : "❌"}</div>
       ))}
