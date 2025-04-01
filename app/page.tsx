@@ -28,6 +28,20 @@ const defaultProviders = [
   { name: "Porkbun", apiUrl: "https://porkbun.com/api/", apiKey: "" }
 ];
 
+
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const savedExt = localStorage.getItem("extensions");
+    const savedProviders = localStorage.getItem("apiProviders");
+    if (savedExt) setExtensions(JSON.parse(savedExt));
+    if (savedProviders) {
+      setProviders(JSON.parse(savedProviders));
+    } else {
+      setProviders(defaultProviders);
+    }
+  }
+}, []);
+
 export default function DomainSearchApp() {
   const charset = "abcdefghijklmnopqrstuvwxyz";
 
@@ -54,32 +68,26 @@ export default function DomainSearchApp() {
 const defaultProviders = [
 
 
-useEffect(() => {
     if (typeof window !== "undefined") {
       const savedExt = localStorage.getItem("extensions");
       const savedProviders = localStorage.getItem("apiProviders");
       if (savedExt) setExtensions(JSON.parse(savedExt));
       if (savedProviders) { setProviders(JSON.parse(savedProviders)); } else { setProviders(defaultProviders); }
-    }
   }
 }, []);
 
   
 
 
-useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem("extensions", JSON.stringify(extensions));
-    }
   }, [extensions]);
 
   
 
 
-useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem("apiProviders", JSON.stringify(providers));
-    }
   }, [providers]);
 
   const generateShortNames = (length = 3, count = 100): string[] => {
@@ -180,10 +188,8 @@ useEffect(() => {
   
 
 
-useEffect(() => {
     if (autoMode && !paused) {
       runAutoSearch();
-    }
   }, [autoMode, lastIndex, paused]);
 
   return (
