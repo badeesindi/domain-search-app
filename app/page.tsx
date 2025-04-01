@@ -90,10 +90,12 @@ export default function DomainSearchApp() {
       <h2 style={{ textAlign: "center" }}>🔍 نظام البحث الذكي عن أسماء النطاقات</h2>
 
       <input
-        type="text"
-        value={domain}
-        onChange={(e) => setDomain(e.target.value)}
-        placeholder="أدخل اسم النطاق..." style={{ width: "100%", padding: "10px", marginBottom: 10 }} />
+  type="text"
+  value={domain}
+  onChange={(e) => setDomain(e.target.value)}
+  placeholder="أدخل اسم النطاق..."
+  style={{ width: "100%", padding: "10px", marginBottom: 10 }}
+/>
       <div style={{ marginTop: 10 }}>
         <h4>🌐 الامتدادات المستخدمة في البحث:</h4>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
@@ -149,11 +151,12 @@ export default function DomainSearchApp() {
             ))}
           </div>
           <input
-            type="text"
-            placeholder="إضافة امتداد جديد (مثال: .tech)"
-            value={newExt}
-            onChange={(e) => setNewExt(e.target.value)}
-          />
+  type="text"
+  value={domain}
+  onChange={(e) => setDomain(e.target.value)}
+  placeholder="أدخل اسم النطاق..."
+  style={{ width: "100%", padding: "10px", marginBottom: 10 }}
+/>
           <button onClick={() => {
             if (newExt && !extensions.includes(newExt)) {
               const updated = [...extensions, newExt];
@@ -177,53 +180,37 @@ export default function DomainSearchApp() {
               />{" "}
               {p.name}
               <input
-                type="text"
-                placeholder="API Key"
-                value={p.apiKey}
-                onChange={(e) => {
-                  const updated = [...providers];
-                  updated[i].apiKey = e.target.value;
-                  setProviders(updated);
-                }}
-                style={{ marginRight: 5 }}
-              />
+  type="text"
+  value={domain}
+  onChange={(e) => setDomain(e.target.value)}
+  placeholder="أدخل اسم النطاق..."
+  style={{ width: "100%", padding: "10px", marginBottom: 10 }}
+/>
               {p.name === "GoDaddy" && (
                 <input
-                  type="text"
-                  placeholder="API Secret"
-                  value={p.apiSecret}
-                  onChange={(e) => {
-                    const updated = [...providers];
-                    updated[i].apiSecret = e.target.value;
-                    setProviders(updated);
-                  }}
-                  style={{ marginRight: 5 }}
-                />
+  type="text"
+  value={domain}
+  onChange={(e) => setDomain(e.target.value)}
+  placeholder="أدخل اسم النطاق..."
+  style={{ width: "100%", padding: "10px", marginBottom: 10 }}
+/>
               )}
               {p.name === "Namecheap" && (
                 <>
                   <input
-                    type="text"
-                    placeholder="Username"
-                    value={p.username}
-                    onChange={(e) => {
-                      const updated = [...providers];
-                      updated[i].username = e.target.value;
-                      setProviders(updated);
-                    }}
-                    style={{ marginRight: 5 }}
-                  />
+  type="text"
+  value={domain}
+  onChange={(e) => setDomain(e.target.value)}
+  placeholder="أدخل اسم النطاق..."
+  style={{ width: "100%", padding: "10px", marginBottom: 10 }}
+/>
                   <input
-                    type="text"
-                    placeholder="Client IP"
-                    value={p.clientIp}
-                    onChange={(e) => {
-                      const updated = [...providers];
-                      updated[i].clientIp = e.target.value;
-                      setProviders(updated);
-                    }}
-                    style={{ marginRight: 5 }}
-                  />
+  type="text"
+  value={domain}
+  onChange={(e) => setDomain(e.target.value)}
+  placeholder="أدخل اسم النطاق..."
+  style={{ width: "100%", padding: "10px", marginBottom: 10 }}
+/>
                 </>
               )}
             </div>
