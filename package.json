@@ -1,5 +1,5 @@
 {
-  "name": "domain-search-full-features-final",
+  "name": "domain-search-clean-summary",
   "version": "1.0.0",
   "scripts": {
     "dev": "next dev",

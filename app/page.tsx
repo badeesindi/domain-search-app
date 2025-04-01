@@ -5,6 +5,7 @@ interface Provider {
   name: string;
   apiUrl: string;
   apiKey: string;
+  enabled: boolean;
 }
 
 interface DomainResult {
@@ -14,16 +15,16 @@ interface DomainResult {
 }
 
 const defaultProviders: Provider[] = [
-  { name: "WhoisXML", apiUrl: "https://api.whoisxml.com", apiKey: "" },
-  { name: "GoDaddy", apiUrl: "https://api.godaddy.com", apiKey: "" },
-  { name: "Namecheap", apiUrl: "https://api.namecheap.com", apiKey: "" },
-  { name: "Domainr", apiUrl: "https://api.domainr.com", apiKey: "" },
-  { name: "Google Domains", apiUrl: "https://domains.google.com", apiKey: "" },
-  { name: "Dynadot", apiUrl: "https://api.dynadot.com", apiKey: "" },
-  { name: "Hover", apiUrl: "https://api.hover.com", apiKey: "" },
-  { name: "Gandi", apiUrl: "https://api.gandi.net", apiKey: "" },
-  { name: "Bluehost", apiUrl: "https://api.bluehost.com", apiKey: "" },
-  { name: "Porkbun", apiUrl: "https://porkbun.com/api", apiKey: "" }
+  { name: "WhoisXML", apiUrl: "", apiKey: "", enabled: true },
+  { name: "GoDaddy", apiUrl: "", apiKey: "", enabled: true },
+  { name: "Namecheap", apiUrl: "", apiKey: "", enabled: true },
+  { name: "Google Domains", apiUrl: "", apiKey: "", enabled: true },
+  { name: "Dynadot", apiUrl: "", apiKey: "", enabled: true },
+  { name: "Hover", apiUrl: "", apiKey: "", enabled: true },
+  { name: "Gandi", apiUrl: "", apiKey: "", enabled: true },
+  { name: "Bluehost", apiUrl: "", apiKey: "", enabled: true },
+  { name: "Porkbun", apiUrl: "", apiKey: "", enabled: true },
+  { name: "Domainr", apiUrl: "", apiKey: "", enabled: true }
 ];
 
 const defaultExtensions = [".com", ".net", ".org", ".co", ".info", ".me", ".store", ".online"];
@@ -33,89 +34,95 @@ export default function DomainSearchApp() {
   const [results, setResults] = useState<DomainResult[]>([]);
   const [extensions, setExtensions] = useState<string[]>(defaultExtensions);
   const [providers, setProviders] = useState<Provider[]>(defaultProviders);
-  const [isSearching, setIsSearching] = useState(false);
   const [autoGenerate, setAutoGenerate] = useState(false);
   const [summary, setSummary] = useState({ available: 0, unavailable: 0 });
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const savedExt = localStorage.getItem("extensions");
-      const savedProviders = localStorage.getItem("apiProviders");
-      if (savedExt) setExtensions(JSON.parse(savedExt));
-      if (savedProviders) setProviders(JSON.parse(savedProviders));
+      const ext = localStorage.getItem("extensions");
+      const prov = localStorage.getItem("providers");
+      if (ext) setExtensions(JSON.parse(ext));
+      if (prov) setProviders(JSON.parse(prov));
     }
   }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem("extensions", JSON.stringify(extensions));
-      localStorage.setItem("apiProviders", JSON.stringify(providers));
+      localStorage.setItem("providers", JSON.stringify(providers));
     }
   }, [extensions, providers]);
 
   const generateName = () => {
     const letters = "abcdefghijklmnopqrstuvwxyz";
-    let name = "";
-    for (let i = 0; i < 3; i++) {
-      name += letters[Math.floor(Math.random() * letters.length)];
-    }
-    return name;
+    return Array.from({ length: 3 }, () =>
+      letters[Math.floor(Math.random() * letters.length)]
+    ).join("");
   };
 
   const searchDomains = async (base: string) => {
-    setIsSearching(true);
-    let found = false;
     const res: DomainResult[] = [];
-
+    let found = false;
     for (const ext of extensions) {
       const fullDomain = `${base}${ext}`;
-      for (const provider of providers) {
+      for (const provider of providers.filter(p => p.enabled)) {
         const available = Math.random() > 0.5;
         res.push({ domain: fullDomain, available, provider: provider.name });
         if (available) found = true;
       }
     }
-
     setResults(prev => [...prev, ...res]);
     setSummary({
       available: res.filter(r => r.available).length,
       unavailable: res.filter(r => !r.available).length
     });
-
     return found;
   };
 
   const startAutoSearch = async () => {
     setResults([]);
-    while (autoGenerate && !await searchDomains(generateName())) {}
-    setIsSearching(false);
+    let found = false;
+    while (autoGenerate && !found) {
+      found = await searchDomains(generateName());
+    }
   };
 
   return (
     <div dir="rtl" style={{ maxWidth: 800, margin: "2rem auto", fontFamily: "Arial" }}>
-      <h2>🔍 البحث عن نطاق</h2>
-      <input type="text" value={domain} onChange={(e) => setDomain(e.target.value)} placeholder="ادخل اسم النطاق..." style={{ width: "100%", padding: "10px", marginBottom: "10px" }} />
-      <button onClick={() => searchDomains(domain)} disabled={isSearching}>🔎 بحث يدوي</button>
-      <button onClick={() => { setAutoGenerate(true); startAutoSearch(); }} disabled={isSearching}>🚀 بحث تلقائي</button>
-      <button onClick={() => setAutoGenerate(false)} style={{ marginRight: "10px" }}>⏹️ إيقاف</button>
-      <div style={{ marginTop: 10 }}>✅ المتاح: {summary.available} | ❌ غير المتاح: {summary.unavailable}</div>
-      <div style={{ marginTop: 20 }}>
-        <h4>📡 مزودي الخدمة:</h4>
-        {providers.map((p, i) => (
-          <div key={i}>{p.name}</div>
-        ))}
-        <h4>🌐 الامتدادات:</h4>
-        {extensions.map((ext, i) => (
-          <div key={i}>{ext}</div>
-        ))}
-      </div>
+      <h2>🔍 نظام البحث عن أسماء النطاقات القصيرة</h2>
+      <input type="text" value={domain} onChange={(e) => setDomain(e.target.value)} placeholder="أدخل اسم النطاق..." style={{ width: "100%", padding: "10px" }} />
+      <button onClick={() => searchDomains(domain)}>🔎 بحث يدوي</button>
+      <button onClick={() => { setAutoGenerate(true); startAutoSearch(); }}>🚀 بحث تلقائي</button>
+      <button onClick={() => setAutoGenerate(false)}>⏹️ إيقاف</button>
+      <p>✅ المتاح: {summary.available} | ❌ غير المتاح: {summary.unavailable}</p>
+
       <hr />
-      <div>
-        <h4>📋 النتائج:</h4>
-        {results.map((r, i) => (
-          <div key={i}>{r.domain} - {r.provider} - {r.available ? "✅ متاح" : "❌ غير متاح"}</div>
-        ))}
-      </div>
+      <h4>📡 مزودي الخدمة:</h4>
+      {providers.map((p, i) => (
+        <div key={i}>
+          <input type="checkbox" checked={p.enabled} onChange={() => {
+            const updated = [...providers];
+            updated[i].enabled = !updated[i].enabled;
+            setProviders(updated);
+          }} /> {p.name}
+        </div>
+      ))}
+
+      <h4>🌐 الامتدادات:</h4>
+      {extensions.map((ext, i) => (
+        <div key={i}>{ext} <button onClick={() => setExtensions(extensions.filter((_, idx) => idx !== i))}>🗑️</button></div>
+      ))}
+      <button onClick={() => {
+        const newExt = prompt("أدخل امتداد جديد");
+        if (newExt && !extensions.includes(newExt)) {
+          setExtensions([...extensions, newExt]);
+        }
+      }}>➕ إضافة امتداد</button>
+
+      <h4>📋 النتائج:</h4>
+      {results.map((r, i) => (
+        <div key={i}>{r.domain} - {r.provider} - {r.available ? "✅" : "❌"}</div>
+      ))}
     </div>
   );
 }
