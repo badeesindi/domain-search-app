@@ -36,23 +36,19 @@ export default function DomainSearchApp() {
   const [summary, setSummary] = useState({ available: 0, unavailable: 0 });
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const ext = localStorage.getItem("extensions");
-      const prov = localStorage.getItem("providers");
-      if (ext) {
-        const parsed = JSON.parse(ext);
-        setExtensions(parsed);
-        setActiveExtensions(parsed);
-      }
-      if (prov) setProviders(JSON.parse(prov));
+    const ext = localStorage.getItem("extensions");
+    const prov = localStorage.getItem("providers");
+    if (ext) {
+      const parsed = JSON.parse(ext);
+      setExtensions(parsed);
+      setActiveExtensions(parsed);
     }
+    if (prov) setProviders(JSON.parse(prov));
   }, []);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("extensions", JSON.stringify(extensions));
-      localStorage.setItem("providers", JSON.stringify(providers));
-    }
+    localStorage.setItem("extensions", JSON.stringify(extensions));
+    localStorage.setItem("providers", JSON.stringify(providers));
   }, [extensions, providers]);
 
   const generateName = () => {
@@ -69,7 +65,7 @@ export default function DomainSearchApp() {
       const fullDomain = `${base}${ext}`;
       for (const provider of providers.filter(p => p.enabled && p.apiKey)) {
         const available = Math.random() > 0.5;
-        const price = Math.floor(Math.random() * 100) + 5;
+        const price = Math.floor(Math.random() * 100) + 10;
         res.push({ domain: fullDomain, available, provider: provider.name, price });
         if (available) found = true;
       }
@@ -90,12 +86,12 @@ export default function DomainSearchApp() {
       found = await searchDomains(generateName());
       attempts++;
     }
-    setAutoGenerate(false); // إيقاف البحث التلقائي بعد المحاولات
+    setAutoGenerate(false);
   };
 
   return (
-    <div dir="rtl" style={{ maxWidth: 1000, margin: "auto", background: "#fff", padding: 20, borderRadius: 8 }}>
-      <h2 style={{ textAlign: "center" }}>🔍 نظام البحث عن أسماء النطاقات القصيرة</h2>
+    <div style={{ maxWidth: 1000, margin: "auto", background: "#fff", padding: 20, borderRadius: 8 }}>
+      <h2 style={{ textAlign: "center" }}>🔍 نظام البحث الذكي عن أسماء النطاقات</h2>
       <input
         type="text"
         value={domain}
@@ -111,6 +107,55 @@ export default function DomainSearchApp() {
       </div>
       <p style={{ marginTop: 10 }}>✅ المتاح: {summary.available} | ❌ غير المتاح: {summary.unavailable}</p>
 
+      {showSettings && (
+        <div style={{ background: "#f1f1f1", padding: 10, marginTop: 20 }}>
+          <h4>📡 مزودي الخدمة:</h4>
+          {providers.map((p, i) => (
+            <div key={i} style={{ marginBottom: 5 }}>
+              <input
+                type="checkbox"
+                checked={p.enabled}
+                onChange={() => {
+                  const updated = [...providers];
+                  updated[i].enabled = !updated[i].enabled;
+                  setProviders(updated);
+                }}
+              /> {p.name}
+              <input type="text" placeholder="API Key" value={p.apiKey}
+                onChange={(e) => {
+                  const updated = [...providers];
+                  updated[i].apiKey = e.target.value;
+                  setProviders(updated);
+                }} style={{ marginRight: 5 }} />
+              {p.name === "GoDaddy" && (
+                <input type="text" placeholder="API Secret" value={p.apiSecret}
+                  onChange={(e) => {
+                    const updated = [...providers];
+                    updated[i].apiSecret = e.target.value;
+                    setProviders(updated);
+                  }} style={{ marginRight: 5 }} />
+              )}
+              {p.name === "Namecheap" && (
+                <>
+                  <input type="text" placeholder="Username" value={p.username}
+                    onChange={(e) => {
+                      const updated = [...providers];
+                      updated[i].username = e.target.value;
+                      setProviders(updated);
+                    }} style={{ marginRight: 5 }} />
+                  <input type="text" placeholder="Client IP" value={p.clientIp}
+                    onChange={(e) => {
+                      const updated = [...providers];
+                      updated[i].clientIp = e.target.value;
+                      setProviders(updated);
+                    }} style={{ marginRight: 5 }} />
+                </>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
       {results.length > 0 && (
         <div style={{ marginTop: 30 }}>
           <h4>📋 نتائج البحث:</h4>
@@ -120,7 +165,7 @@ export default function DomainSearchApp() {
                 <th style={{ border: "1px solid #ccc", padding: 8 }}>النطاق</th>
                 <th style={{ border: "1px solid #ccc", padding: 8 }}>المزود</th>
                 <th style={{ border: "1px solid #ccc", padding: 8 }}>الحالة</th>
-                <th style={{ border: "1px solid #ccc", padding: 8 }}>السعر (تقديري)</th>
+                <th style={{ border: "1px solid #ccc", padding: 8 }}>السعر</th>
               </tr>
             </thead>
             <tbody>
@@ -129,7 +174,7 @@ export default function DomainSearchApp() {
                   <td style={{ border: "1px solid #ccc", padding: 8 }}>{r.domain}</td>
                   <td style={{ border: "1px solid #ccc", padding: 8 }}>{r.provider}</td>
                   <td style={{ border: "1px solid #ccc", padding: 8 }}>{r.available ? "✅ متاح" : "❌ غير متاح"}</td>
-                  <td style={{ border: "1px solid #ccc", padding: 8 }}>{r.price ? `${r.price} ر.س` : "-"}</td>
+                  <td style={{ border: "1px solid #ccc", padding: 8 }}>{r.price} ر.س</td>
                 </tr>
               ))}
             </tbody>
