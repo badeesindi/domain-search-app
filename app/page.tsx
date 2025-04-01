@@ -51,7 +51,7 @@ export default function DomainSearchApp() {
     const resultList: DomainResult[] = selectedExtensions.map((ext) => {
       const isAvailable = Math.random() > 0.5;
       return {
-        domain: \`\${name}\${ext}\`,
+        domain: `${name}${ext}`,
         available: isAvailable,
         provider: "محاكاة",
       };
@@ -67,7 +67,7 @@ export default function DomainSearchApp() {
 
     for (const name of batch) {
       if (paused) break;
-      setStatus(\`جاري فحص: \${name}\`);
+      setStatus(`جاري فحص: ${name}`);
       const checkResults = await simulateCheck(name);
       const found = checkResults.find((r) => r.available);
       setResults((prev) => [...prev, ...checkResults]);
@@ -77,7 +77,7 @@ export default function DomainSearchApp() {
       }));
       setLastIndex((prev) => prev + 1);
       if (found) {
-        setStatus(\`تم العثور على نطاق متاح: \${found.domain}\`);
+        setStatus(`تم العثور على نطاق متاح: ${found.domain}`);
         break;
       }
     }
