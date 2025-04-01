@@ -54,7 +54,7 @@ export default function DomainSearchApp() {
   const generateName = async () => {
     const aiNames = ["zix", "qor", "nuv", "tre", "fex", "vyn", "bax", "kul"];
     return aiNames[Math.floor(Math.random() * aiNames.length)];
-  };
+
 
   const searchDomains = async (base: string) => {
     const res: DomainResult[] = [];
@@ -74,7 +74,7 @@ export default function DomainSearchApp() {
       unavailable: res.filter(r => !r.available).length
     });
     return found;
-  };
+
 
   const startSmartSearch = async () => {
     let found = false;
@@ -83,7 +83,7 @@ export default function DomainSearchApp() {
       found = await searchDomains(name);
     }
     setAutoGenerate(false);
-  };
+
 
   return (
     <div style={{ maxWidth: 1000, margin: "auto", background: "#fff", padding: 20, borderRadius: 8 }}>
