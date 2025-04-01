@@ -26,7 +26,7 @@ const defaultProviders = [
   { name: "Gandi", apiUrl: "https://api.gandi.net/", apiKey: "" },
   { name: "Bluehost", apiUrl: "https://api.bluehost.com/", apiKey: "" },
   { name: "Porkbun", apiUrl: "https://porkbun.com/api/", apiKey: "" }
-];
+]
 
 export default function DomainSearchApp() {
   const charset = "abcdefghijklmnopqrstuvwxyz";
@@ -86,12 +86,12 @@ useEffect(() => {
     while (names.size < count) {
       let name = "";
       for (let i = 0; i < length; i++) {
-        name += charset[Math.floor(Math.random() * charset.length)];
+        name += charset[Math.floor(Math.random() * charset.length)]
       }
       names.add(name);
     }
     return Array.from(names);
-  };
+  }
 
   const simulateCheck = async (name: string): Promise<DomainResult[]> => {
     return extensions.map((ext) => {
@@ -99,9 +99,9 @@ useEffect(() => {
         domain: `${name}${ext}`,
         available: Math.random() > 0.5,
         provider: "محاكاة"
-      };
+      }
     });
-  };
+  }
 
   const runAutoSearch = async (): Promise<void> => {
     setLoading(true);
@@ -124,7 +124,7 @@ useEffect(() => {
     }
     setLoading(false);
     setAutoMode(false);
-  };
+  }
 
   const startAutoMode = (): void => {
     const generated = generateShortNames(3, 100);
@@ -134,47 +134,47 @@ useEffect(() => {
     setSummary({ available: 0, unavailable: 0 });
     setPaused(false);
     setAutoMode(true);
-  };
+  }
 
   const addExtension = () => {
     if (newExt && !extensions.includes(newExt)) {
       setExtensions([...extensions, newExt]);
       setNewExt("");
     }
-  };
+  }
 
   const updateExtension = (index: number) => {
-    const updated = [...extensions];
+    const updated = [...extensions]
     updated[index] = editedExt;
     setExtensions(updated);
     setEditingIndex(null);
     setEditedExt("");
-  };
+  }
 
   const deleteExtension = (index: number) => {
     const updated = extensions.filter((_, i) => i !== index);
     setExtensions(updated);
-  };
+  }
 
   const updateProvider = (index: number) => {
-    const updated = [...providers];
+    const updated = [...providers]
     updated[index] = newProvider;
     setProviders(updated);
     setEditingIndex(null);
     setNewProvider({ name: "", apiUrl: "", apiKey: "" });
-  };
+  }
 
   const deleteProvider = (index: number) => {
     const updated = providers.filter((_, i) => i !== index);
     setProviders(updated);
-  };
+  }
 
   const addProvider = () => {
     if (newProvider.name && newProvider.apiUrl) {
       setProviders([...providers, newProvider]);
       setNewProvider({ name: "", apiUrl: "", apiKey: "" });
     }
-  };
+  }
 
   
 
