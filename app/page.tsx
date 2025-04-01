@@ -81,10 +81,8 @@ export default function DomainSearchApp() {
   const startAutoSearch = async () => {
     setResults([]);
     let found = false;
-    let attempts = 0;
-    while (autoGenerate && !found && attempts < 50) {
+    while (autoGenerate && !found) {
       found = await searchDomains(generateName());
-      attempts++;
     }
     setAutoGenerate(false);
   };
