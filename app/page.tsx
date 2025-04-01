@@ -3,9 +3,11 @@ import { useState, useEffect } from "react";
 
 interface Provider {
   name: string;
-  apiUrl: string;
-  apiKey: string;
   enabled: boolean;
+  apiKey: string;
+  apiSecret?: string;
+  username?: string;
+  clientIp?: string;
 }
 
 interface DomainResult {
@@ -15,16 +17,16 @@ interface DomainResult {
 }
 
 const defaultProviders: Provider[] = [
-  { name: "WhoisXML", apiUrl: "", apiKey: "", enabled: true },
-  { name: "GoDaddy", apiUrl: "", apiKey: "", enabled: true },
-  { name: "Namecheap", apiUrl: "", apiKey: "", enabled: true },
-  { name: "Google Domains", apiUrl: "", apiKey: "", enabled: true },
-  { name: "Dynadot", apiUrl: "", apiKey: "", enabled: true },
-  { name: "Hover", apiUrl: "", apiKey: "", enabled: true },
-  { name: "Gandi", apiUrl: "", apiKey: "", enabled: true },
-  { name: "Bluehost", apiUrl: "", apiKey: "", enabled: true },
-  { name: "Porkbun", apiUrl: "", apiKey: "", enabled: true },
-  { name: "Domainr", apiUrl: "", apiKey: "", enabled: true }
+  { name: "WhoisXML", enabled: true, apiKey: "" },
+  { name: "GoDaddy", enabled: true, apiKey: "", apiSecret: "" },
+  { name: "Namecheap", enabled: true, apiKey: "", username: "", clientIp: "" },
+  { name: "Google Domains", enabled: true, apiKey: "" },
+  { name: "Dynadot", enabled: true, apiKey: "" },
+  { name: "Hover", enabled: true, apiKey: "" },
+  { name: "Gandi", enabled: true, apiKey: "" },
+  { name: "Bluehost", enabled: true, apiKey: "" },
+  { name: "Porkbun", enabled: true, apiKey: "" },
+  { name: "Domainr", enabled: true, apiKey: "" }
 ];
 
 const defaultExtensions = [".com", ".net", ".org", ".co", ".info", ".me", ".store", ".online"];
@@ -124,7 +126,7 @@ export default function DomainSearchApp() {
         <div style={{ background: "#f9f9f9", padding: 10, marginTop: 20 }}>
           <h4>📡 مزودي الخدمة:</h4>
           {providers.map((p, i) => (
-            <div key={i} style={{ marginBottom: 5 }}>
+            <div key={i} style={{ marginBottom: 10 }}>
               <input
                 type="checkbox"
                 checked={p.enabled}
@@ -133,19 +135,37 @@ export default function DomainSearchApp() {
                   updated[i].enabled = !updated[i].enabled;
                   setProviders(updated);
                 }}
-              />{" "}
-              {p.name}
-              <input
-                type="text"
-                placeholder="API Key"
-                value={p.apiKey}
+              /> {p.name}
+              <input type="text" placeholder="API Key" value={p.apiKey}
                 onChange={(e) => {
                   const updated = [...providers];
                   updated[i].apiKey = e.target.value;
                   setProviders(updated);
-                }}
-                style={{ marginRight: 10, padding: 4 }}
-              />
+                }} style={{ marginRight: 5 }} />
+              {p.name === "GoDaddy" && (
+                <input type="text" placeholder="API Secret" value={p.apiSecret}
+                  onChange={(e) => {
+                    const updated = [...providers];
+                    updated[i].apiSecret = e.target.value;
+                    setProviders(updated);
+                  }} style={{ marginRight: 5 }} />
+              )}
+              {p.name === "Namecheap" && (
+                <>
+                  <input type="text" placeholder="Username" value={p.username}
+                    onChange={(e) => {
+                      const updated = [...providers];
+                      updated[i].username = e.target.value;
+                      setProviders(updated);
+                    }} style={{ marginRight: 5 }} />
+                  <input type="text" placeholder="Client IP" value={p.clientIp}
+                    onChange={(e) => {
+                      const updated = [...providers];
+                      updated[i].clientIp = e.target.value;
+                      setProviders(updated);
+                    }} style={{ marginRight: 5 }} />
+                </>
+              )}
             </div>
           ))}
 

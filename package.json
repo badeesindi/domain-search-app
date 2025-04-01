@@ -1,5 +1,5 @@
 {
-  "name": "domain-search-final",
+  "name": "domain-search-full-final",
   "version": "1.0.0",
   "scripts": {
     "dev": "next dev",
