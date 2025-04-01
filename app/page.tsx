@@ -14,22 +14,16 @@ interface DomainResult {
   domain: string;
   available: boolean;
   provider: string;
+  price?: number;
 }
 
 const defaultProviders: Provider[] = [
   { name: "WhoisXML", enabled: true, apiKey: "" },
   { name: "GoDaddy", enabled: true, apiKey: "", apiSecret: "" },
-  { name: "Namecheap", enabled: true, apiKey: "", username: "", clientIp: "" },
-  { name: "Google Domains", enabled: true, apiKey: "" },
-  { name: "Dynadot", enabled: true, apiKey: "" },
-  { name: "Hover", enabled: true, apiKey: "" },
-  { name: "Gandi", enabled: true, apiKey: "" },
-  { name: "Bluehost", enabled: true, apiKey: "" },
-  { name: "Porkbun", enabled: true, apiKey: "" },
-  { name: "Domainr", enabled: true, apiKey: "" }
+  { name: "Namecheap", enabled: true, apiKey: "", username: "", clientIp: "" }
 ];
 
-const defaultExtensions = [".com", ".net", ".org", ".co", ".info", ".me", ".store", ".online"];
+const defaultExtensions = [".com", ".net", ".org", ".co", ".info"];
 
 export default function DomainSearchApp() {
   const [domain, setDomain] = useState("");
@@ -75,7 +69,8 @@ export default function DomainSearchApp() {
       const fullDomain = `${base}${ext}`;
       for (const provider of providers.filter(p => p.enabled && p.apiKey)) {
         const available = Math.random() > 0.5;
-        res.push({ domain: fullDomain, available, provider: provider.name });
+        const price = Math.floor(Math.random() * 100) + 5;
+        res.push({ domain: fullDomain, available, provider: provider.name, price });
         if (available) found = true;
       }
     }
@@ -96,37 +91,45 @@ export default function DomainSearchApp() {
   };
 
   return (
-    <div dir="rtl" style={{ maxWidth: 800, margin: "2rem auto", fontFamily: "Arial" }}>
-      <h2>🔍 نظام البحث عن أسماء النطاقات القصيرة</h2>
-      <input type="text" value={domain} onChange={(e) => setDomain(e.target.value)} placeholder="أدخل اسم النطاق..." style={{ width: "100%", padding: "10px" }} />
-      <div style={{ marginTop: 10 }}>
+    <div style={{ maxWidth: 1000, margin: "auto", background: "#fff", padding: 20, borderRadius: 8 }}>
+      <h2 style={{ textAlign: "center" }}>🔍 نظام البحث عن أسماء النطاقات القصيرة</h2>
+      <input
+        type="text"
+        value={domain}
+        onChange={(e) => setDomain(e.target.value)}
+        placeholder="أدخل اسم النطاق..."
+        style={{ width: "100%", padding: "10px", marginBottom: 10 }}
+      />
+      <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
         <button onClick={() => searchDomains(domain)}>🔎 بحث يدوي</button>
         <button onClick={() => { setAutoGenerate(true); startAutoSearch(); }}>🚀 بحث تلقائي</button>
         <button onClick={() => setAutoGenerate(false)}>⏹️ إيقاف</button>
         <button onClick={() => setShowSettings(!showSettings)}>⚙️ الإعدادات</button>
       </div>
-      <p>✅ المتاح: {summary.available} | ❌ غير المتاح: {summary.unavailable}</p>
+      <p style={{ marginTop: 10 }}>✅ المتاح: {summary.available} | ❌ غير المتاح: {summary.unavailable}</p>
 
       <h4>🌐 الامتدادات:</h4>
-      {extensions.map((ext, i) => (
-        <label key={i} style={{ marginInlineEnd: 10 }}>
-          <input
-            type="checkbox"
-            checked={activeExtensions.includes(ext)}
-            onChange={() => {
-              setActiveExtensions(prev =>
-                prev.includes(ext) ? prev.filter(e => e !== ext) : [...prev, ext]
-              );
-            }}
-          />{" "}{ext}
-        </label>
-      ))}
+      <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+        {extensions.map((ext, i) => (
+          <label key={i}>
+            <input
+              type="checkbox"
+              checked={activeExtensions.includes(ext)}
+              onChange={() => {
+                setActiveExtensions(prev =>
+                  prev.includes(ext) ? prev.filter(e => e !== ext) : [...prev, ext]
+                );
+              }}
+            /> {ext}
+          </label>
+        ))}
+      </div>
 
       {showSettings && (
-        <div style={{ background: "#f9f9f9", padding: 10, marginTop: 20 }}>
+        <div style={{ background: "#f1f1f1", padding: 10, marginTop: 20 }}>
           <h4>📡 مزودي الخدمة:</h4>
           {providers.map((p, i) => (
-            <div key={i} style={{ marginBottom: 10 }}>
+            <div key={i} style={{ marginBottom: 5 }}>
               <input
                 type="checkbox"
                 checked={p.enabled}
@@ -168,31 +171,34 @@ export default function DomainSearchApp() {
               )}
             </div>
           ))}
-
-          <h4>🌐 إدارة الامتدادات:</h4>
-          {extensions.map((ext, i) => (
-            <div key={i}>
-              {ext} <button onClick={() => {
-                const newList = extensions.filter((_, idx) => idx !== i);
-                setExtensions(newList);
-                setActiveExtensions(activeExtensions.filter(e => e !== ext));
-              }}>🗑️</button>
-            </div>
-          ))}
-          <button onClick={() => {
-            const newExt = prompt("أدخل امتداد جديد");
-            if (newExt && !extensions.includes(newExt)) {
-              setExtensions([...extensions, newExt]);
-              setActiveExtensions([...activeExtensions, newExt]);
-            }
-          }}>➕ إضافة امتداد</button>
         </div>
       )}
 
-      <h4 style={{ marginTop: "20px" }}>📋 النتائج:</h4>
-      {results.map((r, i) => (
-        <div key={i}>{r.domain} - {r.provider} - {r.available ? "✅" : "❌"}</div>
-      ))}
+      {results.length > 0 && (
+        <div style={{ marginTop: 30 }}>
+          <h4>📋 نتائج البحث:</h4>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
+              <tr style={{ background: "#eee" }}>
+                <th style={{ border: "1px solid #ccc", padding: 8 }}>النطاق</th>
+                <th style={{ border: "1px solid #ccc", padding: 8 }}>المزود</th>
+                <th style={{ border: "1px solid #ccc", padding: 8 }}>الحالة</th>
+                <th style={{ border: "1px solid #ccc", padding: 8 }}>السعر (تقديري)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {results.map((r, i) => (
+                <tr key={i}>
+                  <td style={{ border: "1px solid #ccc", padding: 8 }}>{r.domain}</td>
+                  <td style={{ border: "1px solid #ccc", padding: 8 }}>{r.provider}</td>
+                  <td style={{ border: "1px solid #ccc", padding: 8 }}>{r.available ? "✅ متاح" : "❌ غير متاح"}</td>
+                  <td style={{ border: "1px solid #ccc", padding: 8 }}>{r.price ? `${r.price} ر.س` : "-"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
