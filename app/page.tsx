@@ -17,13 +17,12 @@ interface DomainResult {
   price?: number;
 }
 
+const defaultExtensions = [".com", ".net", ".org", ".co", ".info"];
 const defaultProviders: Provider[] = [
   { name: "WhoisXML", enabled: true, apiKey: "" },
   { name: "GoDaddy", enabled: true, apiKey: "", apiSecret: "" },
   { name: "Namecheap", enabled: true, apiKey: "", username: "", clientIp: "" }
 ];
-
-const defaultExtensions = [".com", ".net", ".org", ".co", ".info"];
 
 export default function DomainSearchApp() {
   const [domain, setDomain] = useState("");
@@ -34,6 +33,7 @@ export default function DomainSearchApp() {
   const [autoGenerate, setAutoGenerate] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [summary, setSummary] = useState({ available: 0, unavailable: 0 });
+  const [newExt, setNewExt] = useState("");
 
   useEffect(() => {
     const ext = localStorage.getItem("extensions");
@@ -88,6 +88,7 @@ export default function DomainSearchApp() {
   return (
     <div style={{ maxWidth: 1000, margin: "auto", background: "#fff", padding: 20, borderRadius: 8 }}>
       <h2 style={{ textAlign: "center" }}>🔍 نظام البحث الذكي عن أسماء النطاقات</h2>
+
       <input
         type="text"
         value={domain}
@@ -95,6 +96,7 @@ export default function DomainSearchApp() {
         placeholder="أدخل اسم النطاق..."
         style={{ width: "100%", padding: "10px", marginBottom: 10 }}
       />
+
       <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
         <button onClick={() => searchDomains(domain)}>🔎 بحث يدوي</button>
         <button onClick={() => { setAutoGenerate(true); setTimeout(() => startSmartSearch(), 100); }}>
@@ -104,13 +106,46 @@ export default function DomainSearchApp() {
         <button onClick={() => setResults([])}>🗑️ حذف النتائج</button>
         <button onClick={() => setShowSettings(!showSettings)}>⚙️ الإعدادات</button>
       </div>
+
       <p style={{ marginTop: 10 }}>✅ المتاح: {summary.available} | ❌ غير المتاح: {summary.unavailable}</p>
 
       {showSettings && (
-        <div style={{ background: "#f1f1f1", padding: 10, marginTop: 20 }}>
-          <h4>📡 مزودي الخدمة:</h4>
+        <div style={{ background: "#f9f9f9", padding: 15, marginTop: 20, borderRadius: 8 }}>
+          <h4>🌐 الامتدادات:</h4>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 10 }}>
+            {extensions.map((ext, idx) => (
+              <label key={idx}>
+                <input
+                  type="checkbox"
+                  checked={activeExtensions.includes(ext)}
+                  onChange={() =>
+                    setActiveExtensions((prev) =>
+                      prev.includes(ext) ? prev.filter((e) => e !== ext) : [...prev, ext]
+                    )
+                  }
+                />{" "}
+                {ext}
+              </label>
+            ))}
+          </div>
+          <input
+            type="text"
+            placeholder="إضافة امتداد جديد (مثال: .tech)"
+            value={newExt}
+            onChange={(e) => setNewExt(e.target.value)}
+          />
+          <button onClick={() => {
+            if (newExt && !extensions.includes(newExt)) {
+              const updated = [...extensions, newExt];
+              setExtensions(updated);
+              setActiveExtensions(updated);
+              setNewExt("");
+            }
+          }}>➕ إضافة</button>
+
+          <h4 style={{ marginTop: 20 }}>📡 مزودي الخدمة:</h4>
           {providers.map((p, i) => (
-            <div key={i} style={{ marginBottom: 5 }}>
+            <div key={i} style={{ marginBottom: 10 }}>
               <input
                 type="checkbox"
                 checked={p.enabled}
@@ -119,35 +154,56 @@ export default function DomainSearchApp() {
                   updated[i].enabled = !updated[i].enabled;
                   setProviders(updated);
                 }}
-              /> {p.name}
-              <input type="text" placeholder="API Key" value={p.apiKey}
+              />{" "}
+              {p.name}
+              <input
+                type="text"
+                placeholder="API Key"
+                value={p.apiKey}
                 onChange={(e) => {
                   const updated = [...providers];
                   updated[i].apiKey = e.target.value;
                   setProviders(updated);
-                }} style={{ marginRight: 5 }} />
+                }}
+                style={{ marginRight: 5 }}
+              />
               {p.name === "GoDaddy" && (
-                <input type="text" placeholder="API Secret" value={p.apiSecret}
+                <input
+                  type="text"
+                  placeholder="API Secret"
+                  value={p.apiSecret}
                   onChange={(e) => {
                     const updated = [...providers];
                     updated[i].apiSecret = e.target.value;
                     setProviders(updated);
-                  }} style={{ marginRight: 5 }} />
+                  }}
+                  style={{ marginRight: 5 }}
+                />
               )}
               {p.name === "Namecheap" && (
                 <>
-                  <input type="text" placeholder="Username" value={p.username}
+                  <input
+                    type="text"
+                    placeholder="Username"
+                    value={p.username}
                     onChange={(e) => {
                       const updated = [...providers];
                       updated[i].username = e.target.value;
                       setProviders(updated);
-                    }} style={{ marginRight: 5 }} />
-                  <input type="text" placeholder="Client IP" value={p.clientIp}
+                    }}
+                    style={{ marginRight: 5 }}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Client IP"
+                    value={p.clientIp}
                     onChange={(e) => {
                       const updated = [...providers];
                       updated[i].clientIp = e.target.value;
                       setProviders(updated);
-                    }} style={{ marginRight: 5 }} />
+                    }}
+                    style={{ marginRight: 5 }}
+                  />
                 </>
               )}
             </div>
@@ -172,7 +228,9 @@ export default function DomainSearchApp() {
                 <tr key={i}>
                   <td style={{ border: "1px solid #ccc", padding: 8 }}>{r.domain}</td>
                   <td style={{ border: "1px solid #ccc", padding: 8 }}>{r.provider}</td>
-                  <td style={{ border: "1px solid #ccc", padding: 8 }}>{r.available ? "✅ متاح" : "❌ غير متاح"}</td>
+                  <td style={{ border: "1px solid #ccc", padding: 8 }}>
+                    {r.available ? "✅ متاح" : "❌ غير متاح"}
+                  </td>
                   <td style={{ border: "1px solid #ccc", padding: 8 }}>{r.price} ر.س</td>
                 </tr>
               ))}
