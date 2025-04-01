@@ -84,7 +84,7 @@ export default function DomainSearchApp() {
     }
     setAutoGenerate(false);
 
-
+export default function DomainSearchApp() {
   return (
     <div style={{ maxWidth: 1000, margin: "auto", background: "#fff", padding: 20, borderRadius: 8 }}>
       <h2 style={{ textAlign: "center" }}>🔍 نظام البحث الذكي عن أسماء النطاقات</h2>
