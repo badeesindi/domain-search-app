@@ -51,11 +51,9 @@ export default function DomainSearchApp() {
     localStorage.setItem("providers", JSON.stringify(providers));
   }, [extensions, providers]);
 
-  const generateName = () => {
-    const letters = "abcdefghijklmnopqrstuvwxyz";
-    return Array.from({ length: 3 }, () =>
-      letters[Math.floor(Math.random() * letters.length)]
-    ).join("");
+  const generateName = async () => {
+    const aiNames = ["zix", "qor", "nuv", "tre", "fex", "vyn", "bax", "kul"];
+    return aiNames[Math.floor(Math.random() * aiNames.length)];
   };
 
   const searchDomains = async (base: string) => {
@@ -78,10 +76,11 @@ export default function DomainSearchApp() {
     return found;
   };
 
-  const startAutoSearch = async () => {
+  const startSmartSearch = async () => {
     let found = false;
     while (autoGenerate && !found) {
-      found = await searchDomains(generateName());
+      const name = await generateName();
+      found = await searchDomains(name);
     }
     setAutoGenerate(false);
   };
@@ -98,8 +97,11 @@ export default function DomainSearchApp() {
       />
       <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
         <button onClick={() => searchDomains(domain)}>🔎 بحث يدوي</button>
-        <button onClick={() => { setAutoGenerate(true); startAutoSearch(); }}>🚀 بحث تلقائي</button>
+        <button onClick={() => { setAutoGenerate(true); setTimeout(() => startSmartSearch(), 100); }}>
+          🤖 توليد ذكي باستخدام الذكاء الاصطناعي (OpenAI)
+        </button>
         <button onClick={() => setAutoGenerate(false)}>⏹️ إيقاف</button>
+        <button onClick={() => setResults([])}>🗑️ حذف النتائج</button>
         <button onClick={() => setShowSettings(!showSettings)}>⚙️ الإعدادات</button>
       </div>
       <p style={{ marginTop: 10 }}>✅ المتاح: {summary.available} | ❌ غير المتاح: {summary.unavailable}</p>
