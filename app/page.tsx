@@ -61,7 +61,8 @@ useEffect(() => {
       if (savedExt) setExtensions(JSON.parse(savedExt));
       if (savedProviders) { setProviders(JSON.parse(savedProviders)); } else { setProviders(defaultProviders); }
     }
-  }, []);
+  }
+}, []);
 
   
 
