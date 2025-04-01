@@ -79,7 +79,6 @@ export default function DomainSearchApp() {
   };
 
   const startAutoSearch = async () => {
-    setResults([]);
     let found = false;
     while (autoGenerate && !found) {
       found = await searchDomains(generateName());
